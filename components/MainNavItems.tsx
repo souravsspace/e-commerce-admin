@@ -13,29 +13,32 @@ export default function MainNavItems({
 
    const routes = [
       {
+         href: `/${params.storeid}`,
+         label: "Overviews",
+         active: pathname === `/${params.storeid}`,
+      },
+      {
          href: `/${params.storeid}/settings`,
          label: "Settings",
-         actuve: pathname === `/${params.storeid}/settings`,
+         active: pathname === `/${params.storeid}/settings`,
       },
    ]
 
    return (
       <nav
-         className={(cn("flex items-center space-x-4 lg:space-x-6"), className)}
+         className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+         {...props}
       >
-         {routes.map((route, index) => (
+         {routes.map((route) => (
             <Link
-               key={index}
+               key={route.href}
                href={route.href}
-               className={
-                  (cn(
-                     "text-sm font-medium transition-colors hover:text-primary",
-                     route.actuve
-                        ? "text-black dark:text-white"
-                        : "text-muted-foreground"
-                  ),
-                  className)
-               }
+               className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  route.active
+                     ? "text-black dark:text-white"
+                     : "text-muted-foreground"
+               )}
             >
                {route.label}
             </Link>
