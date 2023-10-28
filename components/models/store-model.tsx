@@ -18,6 +18,8 @@ import { Button } from "../ui/button"
 import { useState } from "react"
 import axios from "axios"
 import toast from "react-hot-toast"
+// import { redirect } from "next/navigation"
+// import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
    name: z.string().min(1, { message: "Store name is required" }),
@@ -36,11 +38,15 @@ export default function StoreModel() {
       },
    })
 
+   // const router = useRouter()
    const onSubmit = async (values: FormValues) => {
       try {
          setLoading(true)
-         await axios.post("/api/stores", values)
+         const res = await axios.post("/api/stores", values)
          toast.success("Store created successfully!")
+         // router.replace(`/${res.data.id}`)
+         window.location.assign(`/${res.data.id}`)
+         // redirect(`/${res.data.id}`)
       } catch (error) {
          toast.error("Something went wrong!")
       } finally {

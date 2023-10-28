@@ -10,6 +10,20 @@ export async function POST(req: Request) {
          return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
       const { name } = body
+
+      const sameName = await prismadb.store.findFirst({
+         where: {
+            name: name,
+            userId: userId,
+         },
+      })
+
+      if (sameName)
+         return NextResponse.json(
+            { message: "Name already exists" },
+            { status: 400 }
+         )
+
       if (!name)
          return NextResponse.json(
             { message: "Name is required" },

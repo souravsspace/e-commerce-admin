@@ -1,22 +1,19 @@
-import Navbar from "@/components/Navbar"
 import prismadb from "@/lib/prisma"
 import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
+import SettingsForm from "./components/SettingsForm"
 
-type Props = {
-   children: React.ReactNode
+interface SettingsPageProps {
    params: {
       storeid: string
    }
 }
 
-export default async function DashBoardlayout({
-   children,
+export default async function SettingsPage({
    params: { storeid },
-}: Props) {
+}: SettingsPageProps) {
    const { userId } = auth()
-
-   if (!userId) redirect("/sigin-in")
+   if (!userId) redirect("/sign-in")
 
    const store = await prismadb.store.findFirst({
       where: {
@@ -27,9 +24,10 @@ export default async function DashBoardlayout({
    if (!store) redirect("/")
 
    return (
-      <main>
-         <Navbar />
-         {children}
-      </main>
+      <div className="flex-col">
+         <div className="p-8 pt-6 space-y-4 flex-1">
+            <SettingsForm initialData={store} />
+         </div>
+      </div>
    )
 }

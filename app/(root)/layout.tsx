@@ -1,7 +1,6 @@
 import prismadb from "@/lib/prisma"
 import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation"
-import React from "react"
 
 type Props = {
    children: React.ReactNode
@@ -9,8 +8,8 @@ type Props = {
 
 export default async function SetupLayout({ children }: Props) {
    const { userId } = auth()
-
    if (!userId) redirect("/sign-in")
+
    const store = await prismadb.store.findFirst({
       where: {
          userId,
@@ -21,3 +20,5 @@ export default async function SetupLayout({ children }: Props) {
 
    return <>{children}</>
 }
+
+// 1:56 hours
