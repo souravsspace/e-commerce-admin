@@ -45,9 +45,7 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
 
    const form = useForm({
       resolver: zodResolver(formSchema),
-      defaultValues: {
-         name: initialData.name,
-      },
+      defaultValues: initialData,
    })
 
    const storeid = params.storeid

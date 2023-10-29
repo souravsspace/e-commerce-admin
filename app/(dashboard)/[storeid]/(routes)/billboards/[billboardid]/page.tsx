@@ -1,6 +1,7 @@
 import prismadb from "@/lib/prisma"
+import BillboardForm from "./components/billboard-form"
 
-type Props = {
+type BillboardPageProps = {
    params: {
       billboardid: string
    }
@@ -8,12 +9,18 @@ type Props = {
 
 export default async function BillboardPage({
    params: { billboardid },
-}: Props) {
+}: BillboardPageProps) {
    const billboard = await prismadb.billboard.findUnique({
       where: {
          id: billboardid,
       },
    })
 
-   return <div>BillboardPage {billboard?.label}</div>
+   return (
+      <div className="flex-col">
+         <div className="flex-1 space-y-4 pt-6 p-8">
+            <BillboardForm initialData={billboard} />
+         </div>
+      </div>
+   )
 }
