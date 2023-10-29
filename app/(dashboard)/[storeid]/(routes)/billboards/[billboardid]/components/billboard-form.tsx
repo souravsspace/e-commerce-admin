@@ -87,7 +87,7 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
          await axios.delete(`/api/${storeid}/billboards/${billboardid}`)
          router.refresh()
          toast.success(toastMessage)
-         router.push("/")
+         router.push(`/${storeid}/billboards`)
       } catch (error) {
          toast.error(
             "Make sure you remove all categories that using this billboard."
@@ -167,7 +167,6 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
                </Button>
             </form>
          </Form>
-         <Separator />
       </>
    )
 }
