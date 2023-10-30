@@ -28,6 +28,16 @@ export default function MainNavItems({
          active: pathname === `/${params.storeid}/categories`,
       },
       {
+         href: `/${params.storeid}/sizes`,
+         label: "Sizes",
+         active: pathname === `/${params.storeid}/sizes`,
+      },
+      {
+         href: `/${params.storeid}/colors`,
+         label: "Colors",
+         active: pathname === `/${params.storeid}/colors`,
+      },
+      {
          href: `/${params.storeid}/settings`,
          label: "Settings",
          active: pathname === `/${params.storeid}/settings`,
