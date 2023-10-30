@@ -9,6 +9,7 @@ export default function useOrigin() {
       typeof window !== "undefined" && window.location.origin
          ? window.location.origin
          : ""
+         
    useEffect(() => {
       setMounted(true)
    }, [])

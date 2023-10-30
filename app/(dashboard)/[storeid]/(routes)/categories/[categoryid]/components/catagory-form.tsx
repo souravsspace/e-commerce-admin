@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Billboard } from "@prisma/client"
+import { Billboard, Category } from "@prisma/client"
 import { Trash } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -15,57 +15,60 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import axios from "axios"
 import * as z from "zod"
-import { BillboardFormField } from "./billboard-form-field"
+import { CatagoryFormField } from "./catagory-form-field"
 
-interface BillboardFormProps {
-   initialData: Billboard | null
+interface CategoryFormProps {
+   initialData: Category | null
+   billboards: Billboard[]
 }
 
 const formSchema = z.object({
-   label: z.string().min(1, { message: "Label is required." }),
-   imageUrl: z.string().url({ message: "Invalid URL." }),
+   name: z.string().min(1, { message: "Name is required." }),
+   billboardId: z.string().min(1, { message: "Billboard is required." }),
 })
 
-type BillboardFormValues = z.infer<typeof formSchema>
+type CategoryFormValues = z.infer<typeof formSchema>
 
-export default function BillboardForm({ initialData }: BillboardFormProps) {
+export default function CategoryForm({
+   initialData,
+   billboards,
+}: CategoryFormProps) {
    const [open, setOpen] = useState(false)
    const [loading, setLoading] = useState(false)
 
    const params = useParams()
    const router = useRouter()
 
-   const title = initialData ? "Edit billboard" : "Create billboard"
-   const description = initialData ? "Edit a billboard." : "Add new billboard."
-   const toastMessage = initialData
-      ? "Billboard updated!"
-      : "Billboard created!"
+   const title = initialData ? "Edit Catagory" : "Create catagory"
+   const description = initialData ? "Edit a catagory." : "Add new catagory."
+   const toastMessage = initialData ? "Catagory updated!" : "Catagory created!"
    const action = initialData ? "Save changes" : "Create"
 
    const form = useForm({
       resolver: zodResolver(formSchema),
       defaultValues: initialData || {
-         label: "",
-         imageUrl: "",
+         name: "",
+         billboardId: "",
       },
    })
 
    const storeid = params.storeid
-   const billboardid = params.billboardid
-   const onSubmit = async (field_data: BillboardFormValues) => {
+   const categoryid = params.categoryid
+
+   const onSubmit = async (field_data: CategoryFormValues) => {
       try {
          setLoading(true)
          if (initialData) {
             await axios.patch(
-               `/api/${storeid}/billboards/${billboardid}`,
+               `/api/${storeid}/categories/${categoryid}`,
                field_data
             )
          } else {
-            await axios.post(`/api/${storeid}/billboards`, field_data)
+            await axios.post(`/api/${storeid}/categories`, field_data)
          }
          router.refresh()
          toast.success(toastMessage)
-         router.push(`/${storeid}/billboards`)
+         router.push(`/${storeid}/categories`)
       } catch (error) {
          toast.error("Something went wrong!")
       } finally {
@@ -76,14 +79,12 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
    const onDelete = async () => {
       try {
          setLoading(true)
-         await axios.delete(`/api/${storeid}/billboards/${billboardid}`)
+         await axios.delete(`/api/${storeid}/categories/${categoryid}`)
          router.refresh()
-         toast.success(toastMessage)
-         router.push(`/${storeid}/billboards`)
+         toast.success("Catagory deleted!")
+         router.push(`/${storeid}/categories`)
       } catch (error) {
-         toast.error(
-            "Make sure you remove all categories that using this billboard."
-         )
+         toast.error("Make sure you remove all products using this categories.")
       } finally {
          setLoading(false)
          setOpen(false)
@@ -113,12 +114,18 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
          </div>
          <Separator />
          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-               <BillboardFormField
+            <form
+               onSubmit={form.handleSubmit(onSubmit)}
+               className="space-y-4 w-full"
+            >
+               <CatagoryFormField
+                  billboards={billboards}
                   loading={loading}
-                  action={action}
                   form={form}
                />
+               <Button type="submit" disabled={loading} className="ml-auto">
+                  {action}
+               </Button>
             </form>
          </Form>
       </>
