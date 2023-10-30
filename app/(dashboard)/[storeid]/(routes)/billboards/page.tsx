@@ -10,7 +10,7 @@ export default async function BillboardPage({
       storeid: string
    }
 }) {
-   const billboard = await prismadb.billboard.findMany({
+   const billboards = await prismadb.billboard.findMany({
       where: {
          storeId: storeid,
       },
@@ -19,7 +19,7 @@ export default async function BillboardPage({
       },
    })
 
-   const formattedBillboard: billboardColumn[] = billboard.map((item) => ({
+   const formattedBillboard: billboardColumn[] = billboards.map((item) => ({
       id: item.id,
       label: item.label,
       createdAt: format(item.createdAt, "MMMM do, yyyy"),
