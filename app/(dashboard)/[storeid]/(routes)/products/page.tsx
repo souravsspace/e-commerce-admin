@@ -34,7 +34,6 @@ export default async function ProductPage({
       isFeatured: item.isFeatured,
       size: item.size.value,
       color: item.color.value,
-
       createdAt: format(item.createdAt, "MMMM do, yyyy"),
    }))
 

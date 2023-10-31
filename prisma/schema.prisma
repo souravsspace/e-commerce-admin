@@ -17,6 +17,7 @@ model Store {
   products   Product[]   @relation("StoreToProduct")
   sizes      Size[]      @relation("StoreToSize")
   colors     Color[]     @relation("StoreToColor")
+  orders     Order[]     @relation("StoreToOrder")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -76,22 +77,23 @@ model Color {
 }
 
 model Product {
-  id         String   @id @default(cuid())
-  name       String   @db.VarChar(255)
-  price      Decimal  @db.Decimal()
-  isFeatured Boolean  @default(false)
-  isArchived Boolean  @default(false)
-  store      Store    @relation("StoreToProduct", fields: [storeId], references: [id])
+  id         String       @id @default(cuid())
+  name       String       @db.VarChar(255)
+  price      Decimal      @db.Decimal()
+  isFeatured Boolean      @default(false)
+  isArchived Boolean      @default(false)
+  store      Store        @relation("StoreToProduct", fields: [storeId], references: [id])
   storeId    String
-  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  category   Category     @relation("CategoryToProduct", fields: [categoryId], references: [id])
   categoryId String
-  size       Size     @relation(fields: [sizeId], references: [id])
+  size       Size         @relation(fields: [sizeId], references: [id])
   sizeId     String
-  color      Color    @relation(fields: [colorId], references: [id])
+  color      Color        @relation(fields: [colorId], references: [id])
   colorId    String
   images     Image[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  orderItems OrderItems[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
@@ -105,5 +107,30 @@ model Image {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 
+  @@index([productId])
+}
+
+model Order {
+  id         String       @id @default(cuid())
+  phone      String       @db.VarChar(255)
+  address    String       @db.VarChar(255)
+  isPaid     Boolean      @default(false)
+  store      Store        @relation("StoreToOrder", fields: [storeId], references: [id])
+  storeId    String
+  orderItems OrderItems[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([storeId])
+}
+
+model OrderItems {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@index([orderId])
   @@index([productId])
 }

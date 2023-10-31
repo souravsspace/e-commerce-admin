@@ -87,16 +87,6 @@ export async function PATCH(
             { message: "Size is required" },
             { status: 400 }
          )
-      if (!isArchived)
-         return NextResponse.json(
-            { message: "Archived is required" },
-            { status: 400 }
-         )
-      if (!isFeatured)
-         return NextResponse.json(
-            { message: "Featured is required" },
-            { status: 400 }
-         )
 
       if (!productid)
          return NextResponse.json("Product is required!", { status: 400 })

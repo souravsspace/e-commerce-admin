@@ -11,12 +11,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import ImageUpload from "@/components/ui/image-upload"
+import priceFormatter from "@/lib/price-formatter"
+import { Category, Color, Image, Product, Size } from "@prisma/client"
+import { ProductFormFieldSelect } from "./form-field-select"
+import { Checkbox } from "@/components/ui/checkbox"
 import { UseFormReturn } from "react-hook-form"
 import { ProductFormValues } from "./product-form"
-import priceFormatter from "@/lib/price-formatter"
-import { Category, Color, Product, Size } from "@prisma/client"
-import { ProductFormFieldSelect } from "./product-form-field-select"
-import { Checkbox } from "@/components/ui/checkbox"
 
 interface ProductFormFieldProps {
    loading: boolean
@@ -24,7 +24,7 @@ interface ProductFormFieldProps {
    categories: Category[]
    colors: Color[]
    sizes: Size[]
-   form: UseFormReturn<ProductFormValues, any, undefined>
+   form: UseFormReturn<ProductFormValues>
 }
 
 export function ProductFormField({
@@ -45,14 +45,14 @@ export function ProductFormField({
                   <FormLabel>Images</FormLabel>
                   <FormControl>
                      <ImageUpload
-                        value={field.value.map((image) => image.imageUrl)}
+                        value={field.value.map((image: any) => image.imageUrl)}
                         onChange={(imageUrl) =>
                            field.onChange([...field.value, { imageUrl }])
                         }
                         onRemove={(imageUrl) =>
                            field.onChange([
                               ...field.value.filter(
-                                 (image) => image.imageUrl !== imageUrl
+                                 (image: any) => image.imageUrl !== imageUrl
                               ),
                            ])
                         }

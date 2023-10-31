@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prisma"
 import { auth } from "@clerk/nextjs"
+import { Image, Product } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function POST(
@@ -12,6 +13,10 @@ export async function POST(
       if (!userId)
          return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
+      interface ProductData extends Product {
+         images: Image[]
+      }
+
       const {
          name,
          price,
@@ -21,7 +26,7 @@ export async function POST(
          sizeId,
          isArchived,
          isFeatured,
-      } = body
+      }: Partial<ProductData> = body
 
       if (!name)
          return NextResponse.json(
@@ -33,7 +38,7 @@ export async function POST(
             { message: "Price is required" },
             { status: 400 }
          )
-      if (!images || images.length === 0)
+      if (!images || !images.length)
          return NextResponse.json(
             { message: "Images is required" },
             { status: 400 }
@@ -51,16 +56,6 @@ export async function POST(
       if (!sizeId)
          return NextResponse.json(
             { message: "Size is required" },
-            { status: 400 }
-         )
-      if (!isArchived)
-         return NextResponse.json(
-            { message: "Archived is required" },
-            { status: 400 }
-         )
-      if (!isFeatured)
-         return NextResponse.json(
-            { message: "Featured is required" },
             { status: 400 }
          )
 
@@ -87,11 +82,11 @@ export async function POST(
          data: {
             name,
             price,
-            sizeId,
-            colorId,
-            isArchived,
             isFeatured,
+            isArchived,
             categoryId,
+            colorId,
+            sizeId,
             storeId: storeid,
             images: {
                createMany: {

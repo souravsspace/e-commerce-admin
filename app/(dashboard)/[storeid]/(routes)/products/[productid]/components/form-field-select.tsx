@@ -19,10 +19,10 @@ import { UseFormReturn } from "react-hook-form"
 
 interface ProductFormFieldSelectProps {
    loading: boolean
-   form: UseFormReturn<ProductFormValues, any, undefined>
    categories: Category[]
    colors: Color[]
    sizes: Size[]
+   form: UseFormReturn<ProductFormValues>
 }
 
 export function ProductFormFieldSelect({

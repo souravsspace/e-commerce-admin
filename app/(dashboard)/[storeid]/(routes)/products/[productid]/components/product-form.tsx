@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import axios from "axios"
 import * as z from "zod"
-import { ProductFormField } from "./product-form-field"
+import { ProductFormField } from "./form-field-non"
 
 interface ProductFormProps {
    initialData:
@@ -38,8 +38,8 @@ const formSchema = z.object({
    categoryId: z.string().min(1, { message: "Category is required." }),
    colorId: z.string().min(1, { message: "Color is required." }),
    sizeId: z.string().min(1, { message: "Size is required." }),
-   isFeatured: z.boolean().default(false).optional(),
-   isArchived: z.boolean().default(false).optional(),
+   isFeatured: z.boolean().default(false),
+   isArchived: z.boolean().default(false),
 })
 
 export type ProductFormValues = z.infer<typeof formSchema>
@@ -82,7 +82,7 @@ export default function ProductForm({
 
    const storeid = params.storeid
    const productid = params.productid
-   
+
    const onSubmit = async (field_data: ProductFormValues) => {
       try {
          setLoading(true)
@@ -92,6 +92,7 @@ export default function ProductForm({
                field_data
             )
          } else {
+            console.log(field_data)
             await axios.post(`/api/${storeid}/products`, field_data)
          }
          router.refresh()
