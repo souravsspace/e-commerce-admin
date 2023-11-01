@@ -15,6 +15,9 @@ export async function GET(
          where: {
             id: categoryid,
          },
+         include: {
+            billboard: true,
+         }
       })
 
       return NextResponse.json(category, { status: 200 })
