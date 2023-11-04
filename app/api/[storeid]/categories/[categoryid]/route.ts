@@ -17,7 +17,7 @@ export async function GET(
          },
          include: {
             billboard: true,
-         }
+         },
       })
 
       return NextResponse.json(category, { status: 200 })
